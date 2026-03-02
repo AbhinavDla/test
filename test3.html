@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>The Risk of Semantic Automation</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&amp;family=Roboto+Mono:wght@400;500;700&amp;display=swap"
+        rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+            background-color: #0f172a;
+            color: #f8fafc;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .slide-container {
+            width: 1280px;
+            height: 720px;
+            position: relative;
+            background-color: #0f172a;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* Navigation Arrows */
+        .arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 2.5rem;
+            color: #22d3ee;
+            background-color: rgba(15, 23, 42, 0.6);
+            padding: 0.5rem 1rem;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            z-index: 20;
+        }
+
+        .arrow:hover {
+            background-color: rgba(15, 23, 42, 0.8);
+        }
+
+        .arrow-left {
+            left: 20px;
+        }
+
+        .arrow-right {
+            right: 20px;
+        }
+
+        /* Keep all previous CSS from original slide */
+        .blob {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            z-index: 0;
+            opacity: 0.15;
+        }
+
+        .blob-1 {
+            width: 600px;
+            height: 600px;
+            background-color: #d97706;
+            top: -200px;
+            right: -200px;
+        }
+
+        .blob-2 {
+            width: 500px;
+            height: 500px;
+            background-color: #ef4444;
+            bottom: -150px;
+            left: -150px;
+        }
+
+        .header {
+            padding: 3rem 4rem 1rem 4rem;
+            z-index: 10;
+        }
+
+        .title {
+            font-size: 3rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            color: white;
+            border-left: 6px solid #fbbf24;
+            padding-left: 1.5rem;
+        }
+
+        .content-wrapper {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            padding: 0 4rem 3rem 4rem;
+            z-index: 10;
+            justify-content: space-between;
+        }
+
+        .citation-block {
+            background-color: rgba(30, 41, 59, 0.6);
+            border-left: 4px solid #94a3b8;
+            padding: 1.5rem;
+            border-radius: 0 1rem 1rem 0;
+            margin-bottom: 2rem;
+            backdrop-filter: blur(8px);
+        }
+
+        .citation-text {
+            font-size: 1.25rem;
+            color: #e2e8f0;
+            font-style: italic;
+            margin-bottom: 0.5rem;
+            line-height: 1.5;
+        }
+
+        .citation-source {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 0.9rem;
+            color: #22d3ee;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .comparison-container {
+            display: flex;
+            gap: 2rem;
+            align-items: stretch;
+            margin-bottom: 2rem;
+        }
+
+        .comparison-box {
+            flex: 1;
+            padding: 2rem;
+            border-radius: 1rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            transition: transform 0.3s ease;
+        }
+
+        .box-illusion {
+            background-color: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .box-reality {
+            background-color: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+
+        .comparison-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .icon-check {
+            color: #34d399;
+        }
+
+        .icon-bug {
+            color: #f87171;
+        }
+
+        .comparison-label {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 0.5rem;
+            opacity: 0.8;
+        }
+
+        .comparison-main {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 0.5rem;
+        }
+
+        .comparison-sub {
+            font-size: 1rem;
+            color: #cbd5e1;
+            line-height: 1.4;
+        }
+
+        .arrow-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #64748b;
+            font-size: 1.5rem;
+        }
+
+        .conclusion-box {
+            background: linear-gradient(90deg, rgba(251, 191, 36, 0.1) 0%, rgba(15, 23, 42, 0) 100%);
+            border-left: 6px solid #fbbf24;
+            padding: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            margin-top: auto;
+        }
+
+        .warning-icon {
+            font-size: 2.5rem;
+            color: #fbbf24;
+        }
+
+        .conclusion-text {
+            font-size: 1.75rem;
+            font-weight: 800;
+            color: white;
+            line-height: 1.2;
+        }
+
+        .highlight-danger {
+            color: #fbbf24;
+            text-decoration: underline;
+            text-decoration-color: rgba(251, 191, 36, 0.3);
+            text-decoration-thickness: 4px;
+        }
+
+        .footer-line {
+            height: 6px;
+            width: 100%;
+            display: flex;
+            margin-top: auto;
+        }
+
+        .line-1 {
+            flex: 1;
+            background-color: #22d3ee;
+        }
+
+        .line-2 {
+            flex: 1;
+            background-color: #818cf8;
+        }
+
+        .line-3 {
+            flex: 1;
+            background-color: #fbbf24;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="slide-container">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+
+        <div class="header">
+            <h1 class="title">The Risk of "Semantic" Automation</h1>
+        </div>
+
+        <div class="content-wrapper">
+            <div class="citation-block">
+                <p class="citation-text">
+                    "Large language models can sound accurate without true understanding. They are stochastic parrots."
+                </p>
+                <div class="citation-source">
+                    <i class="fa-solid fa-quote-left mr-2"></i> Emily M. Bender &amp; Timnit Gebru — ACM FAccT 2021
+                </div>
+            </div>
+
+            <div class="text-gray-400 mb-4 font-mono text-sm uppercase tracking-wider text-center">
+                If API migration relies solely on embedding similarity:
+            </div>
+
+            <div class="comparison-container">
+                <div class="comparison-box box-illusion">
+                    <i class="fa-regular fa-circle-check comparison-icon icon-check"></i>
+                    <p class="comparison-label" style="color: #34d399;">Appearance</p>
+                    <p class="comparison-main">Looks Correct</p>
+                    <p class="comparison-sub">
+                        Syntactically valid code that matches the style and naming conventions.
+                    </p>
+                </div>
+
+                <div class="arrow-container">
+                    <i class="fa-solid fa-arrow-right-long"></i>
+                </div>
+
+                <div class="comparison-box box-reality">
+                    <i class="fa-solid fa-bug comparison-icon icon-bug"></i>
+                    <p class="comparison-label" style="color: #f87171;">Reality</p>
+                    <p class="comparison-main">Behaves Incorrectly</p>
+                    <p class="comparison-sub">
+                        Subtle semantic shifts, broken invariants, or security vulnerabilities.
+                    </p>
+                </div>
+            </div>
+
+            <div class="conclusion-box">
+                <i class="fa-solid fa-triangle-exclamation warning-icon"></i>
+                <p class="conclusion-text">
+                    Fluency <span class="text-gray-500">≠</span> <span class="highlight-danger">Semantic
+                        Equivalence</span>
+                </p>
+            </div>
+        </div>
+
+        <!-- Navigation Arrows -->
+        <a href="test2.html" class="arrow arrow-left"><i class="fa-solid fa-arrow-left"></i></a>
+        <a href="test4.html" class="arrow arrow-right"><i class="fa-solid fa-arrow-right"></i></a>
+
+        <div class="footer-line">
+            <div class="line-1"></div>
+            <div class="line-2"></div>
+            <div class="line-3"></div>
+        </div>
+    </div>
+</body>
+
+</html>

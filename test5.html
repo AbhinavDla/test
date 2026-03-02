@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Refined Research Question</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&amp;family=Roboto+Mono:wght@400;500;700&amp;display=swap"
+        rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+            background-color: #0f172a;
+            color: #f8fafc;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .slide-container {
+            width: 1280px;
+            height: 720px;
+            position: relative;
+            background-color: #0f172a;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* Navigation Arrows */
+        .arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 2.5rem;
+            color: #22d3ee;
+            background-color: rgba(15, 23, 42, 0.6);
+            padding: 0.5rem 1rem;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            z-index: 20;
+        }
+
+        .arrow:hover {
+            background-color: rgba(15, 23, 42, 0.8);
+        }
+
+        .arrow-left {
+            left: 20px;
+        }
+
+        .arrow-right {
+            right: 20px;
+        }
+
+        /* Keep all existing CSS from original slide */
+        .blob {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            z-index: 0;
+            opacity: 0.15;
+        }
+
+        .blob-1 {
+            width: 600px;
+            height: 600px;
+            background-color: #10b981;
+            top: -200px;
+            right: -100px;
+        }
+
+        .blob-2 {
+            width: 500px;
+            height: 500px;
+            background-color: #0ea5e9;
+            bottom: -150px;
+            left: -150px;
+        }
+
+        .header {
+            padding: 2.5rem 4rem 1rem 4rem;
+            z-index: 10;
+        }
+
+        .title {
+            font-size: 3rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            color: white;
+            border-left: 6px solid #10b981;
+            padding-left: 1.5rem;
+        }
+
+        .content-wrapper {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            padding: 0 4rem 2rem 4rem;
+            z-index: 10;
+            gap: 2rem;
+        }
+
+        .comparison-section {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .question-box {
+            padding: 1.5rem;
+            border-radius: 1rem;
+            position: relative;
+            backdrop-filter: blur(8px);
+            border: 1px solid transparent;
+            display: flex;
+            align-items: flex-start;
+            gap: 1.5rem;
+        }
+
+        .box-old {
+            background-color: rgba(15, 23, 42, 0.6);
+            border-color: rgba(239, 68, 68, 0.2);
+            opacity: 0.7;
+        }
+
+        .box-new {
+            background-color: rgba(16, 185, 129, 0.1);
+            border-color: rgba(16, 185, 129, 0.3);
+            box-shadow: 0 10px 25px -5px rgba(16, 185, 129, 0.1);
+        }
+
+        .status-icon {
+            font-size: 1.75rem;
+            margin-top: 0.25rem;
+            flex-shrink: 0;
+        }
+
+        .icon-cross {
+            color: #ef4444;
+        }
+
+        .icon-check {
+            color: #34d399;
+        }
+
+        .question-label {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .question-text {
+            font-size: 1.5rem;
+            line-height: 1.4;
+            margin: 0;
+            color: white;
+        }
+
+        .text-old {
+            color: #94a3b8;
+            text-decoration: line-through;
+            text-decoration-color: #ef4444;
+            font-weight: 400;
+        }
+
+        .text-new {
+            font-weight: 600;
+        }
+
+        .highlight-safe {
+            color: #34d399;
+        }
+
+        .highlight-accurate {
+            color: #22d3ee;
+        }
+
+        .highlight-equitable {
+            color: #fbbf24;
+        }
+
+        .framework-container {
+            display: flex;
+            align-items: stretch;
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .pillar-card {
+            flex: 1;
+            background-color: rgba(30, 41, 59, 0.5);
+            border: 1px solid rgba(148, 163, 184, 0.1);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            transition: transform 0.2s;
+        }
+
+        .pillar-icon-box {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+            margin-bottom: 1rem;
+            border: 2px solid;
+        }
+
+        .pillar-1 .pillar-icon-box {
+            background-color: rgba(34, 211, 238, 0.1);
+            border-color: #22d3ee;
+            color: #22d3ee;
+        }
+
+        .pillar-2 .pillar-icon-box {
+            background-color: rgba(129, 140, 248, 0.1);
+            border-color: #818cf8;
+            color: #818cf8;
+        }
+
+        .pillar-3 .pillar-icon-box {
+            background-color: rgba(16, 185, 129, 0.1);
+            border-color: #34d399;
+            color: #34d399;
+        }
+
+        .pillar-title {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: white;
+            margin-bottom: 0.5rem;
+            line-height: 1.3;
+        }
+
+        .pillar-desc {
+            font-size: 0.9rem;
+            color: #cbd5e1;
+            line-height: 1.5;
+        }
+
+        .plus-sign {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #64748b;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .tagline-box {
+            margin-top: auto;
+            text-align: center;
+            padding: 1rem;
+            border-top: 1px solid rgba(148, 163, 184, 0.1);
+        }
+
+        .tagline-text {
+            font-size: 1.25rem;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            color: #e2e8f0;
+            font-weight: 400;
+        }
+
+        .tagline-highlight {
+            font-weight: 800;
+            color: #f8fafc;
+            text-shadow: 0 0 20px rgba(52, 211, 153, 0.4);
+        }
+
+        .footer-line {
+            height: 6px;
+            width: 100%;
+            display: flex;
+            margin-top: auto;
+        }
+
+        .line-1 {
+            flex: 1;
+            background-color: #22d3ee;
+        }
+
+        .line-2 {
+            flex: 1;
+            background-color: #818cf8;
+        }
+
+        .line-3 {
+            flex: 1;
+            background-color: #fbbf24;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="slide-container">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+
+        <div class="header">
+            <h1 class="title">My Refined Research Question</h1>
+        </div>
+
+        <div class="content-wrapper">
+            <div class="comparison-section">
+                <div class="question-box box-old">
+                    <i class="fa-solid fa-xmark status-icon icon-cross"></i>
+                    <div>
+                        <span class="question-label" style="color: #f87171;">Previous Approach</span>
+                        <p class="question-text text-old">
+                            Can documentation automate API migration?
+                        </p>
+                    </div>
+                </div>
+                <div class="question-box box-new">
+                    <i class="fa-solid fa-check status-icon icon-check"></i>
+                    <div>
+                        <span class="question-label" style="color: #34d399;">New Research Question</span>
+                        <p class="question-text text-new">
+                            How can semantic matching be combined with behavioral validation to create automation that
+                            is <span class="highlight-safe">safe</span>, <span
+                                class="highlight-accurate">accurate</span>, and
+                            <span class="highlight-equitable">equitable</span>?
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="framework-container">
+                <div class="pillar-card pillar-1">
+                    <div class="pillar-icon-box">
+                        <i class="fa-regular fa-file-code"></i>
+                    </div>
+                    <p class="pillar-title">Documentation Semantics</p>
+                    <p class="pillar-desc">
+                        Extracting intent &amp; constraints from natural language docs.
+                    </p>
+                </div>
+                <div class="plus-sign">
+                    <i class="fa-solid fa-plus"></i>
+                </div>
+                <div class="pillar-card pillar-2">
+                    <div class="pillar-icon-box">
+                        <i class="fa-solid fa-rotate"></i>
+                    </div>
+                    <p class="pillar-title">Usage Pattern Mining</p>
+                    <p class="pillar-desc">
+                        Learning common adoption patterns from open repositories.
+                    </p>
+                </div>
+                <div class="plus-sign">
+                    <i class="fa-solid fa-plus"></i>
+                </div>
+                <div class="pillar-card pillar-3">
+                    <div class="pillar-icon-box">
+                        <i class="fa-solid fa-flask"></i>
+                    </div>
+                    <p class="pillar-title">Behavioral Validation</p>
+                    <p class="pillar-desc">
+                        Verifying correctness via generated tests and invariants.
+                    </p>
+                </div>
+            </div>
+
+            <div class="tagline-box">
+                <p class="tagline-text">
+                    The Goal is <span class="tagline-highlight">Responsible Automation</span>
+                </p>
+            </div>
+        </div>
+
+        <!-- Navigation Arrows -->
+        <a href="test4.html" class="arrow arrow-left"><i class="fa-solid fa-arrow-left"></i></a>
+        <a href="test6.html" class="arrow arrow-right"><i class="fa-solid fa-arrow-right"></i></a>
+
+        <div class="footer-line">
+            <div class="line-1"></div>
+            <div class="line-2"></div>
+            <div class="line-3"></div>
+        </div>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Two Technical Approaches</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&amp;family=Roboto+Mono:wght@400;500;700&amp;display=swap"
+        rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+            background-color: #0f172a;
+            color: #f8fafc;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .slide-container {
+            width: 1280px;
+            height: 720px;
+            position: relative;
+            background-color: #0f172a;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* Navigation Arrows */
+        .arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 2.5rem;
+            color: #22d3ee;
+            background-color: rgba(15, 23, 42, 0.6);
+            padding: 0.5rem 1rem;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            z-index: 20;
+        }
+
+        .arrow:hover {
+            background-color: rgba(15, 23, 42, 0.8);
+        }
+
+        .arrow-left {
+            left: 20px;
+        }
+
+        .arrow-right {
+            right: 20px;
+        }
+
+        /* Keep all previous CSS */
+        .blob {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            z-index: 0;
+            opacity: 0.2;
+        }
+
+        .blob-1 {
+            width: 500px;
+            height: 500px;
+            background-color: #0ea5e9;
+            top: -100px;
+            right: -100px;
+        }
+
+        .blob-2 {
+            width: 400px;
+            height: 400px;
+            background-color: #6366f1;
+            bottom: -50px;
+            left: -50px;
+        }
+
+        .header {
+            padding: 3rem 4rem 1rem 4rem;
+            z-index: 10;
+        }
+
+        .title {
+            font-size: 3rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            color: white;
+            border-left: 6px solid #22d3ee;
+            padding-left: 1.5rem;
+        }
+
+        .content-wrapper {
+            display: flex;
+            flex: 1;
+            padding: 1rem 4rem 4rem 4rem;
+            gap: 3rem;
+            z-index: 10;
+            align-items: stretch;
+        }
+
+        .column {
+            flex: 1;
+            background-color: rgba(30, 41, 59, 0.4);
+            border: 1px solid rgba(148, 163, 184, 0.1);
+            border-radius: 1.5rem;
+            padding: 2.5rem;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            backdrop-filter: blur(12px);
+            transition: transform 0.3s ease;
+        }
+
+        .number-badge {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 4rem;
+            font-weight: 700;
+            color: rgba(255, 255, 255, 0.05);
+            position: absolute;
+            top: 1rem;
+            right: 1.5rem;
+            line-height: 1;
+        }
+
+        .column-header {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .icon-box {
+            width: 70px;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 1rem;
+            font-size: 2rem;
+        }
+
+        .icon-mining {
+            background-color: rgba(99, 102, 241, 0.2);
+            color: #818cf8;
+        }
+
+        .icon-docs {
+            background-color: rgba(34, 211, 238, 0.2);
+            color: #22d3ee;
+        }
+
+        .col-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin: 0;
+            line-height: 1.2;
+        }
+
+        .citation {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 0.85rem;
+            color: #94a3b8;
+            margin-top: 0.5rem;
+            display: block;
+            font-weight: 500;
+        }
+
+        .description {
+            font-size: 1.15rem;
+            line-height: 1.6;
+            color: #cbd5e1;
+            margin-bottom: auto;
+        }
+
+        .description ul {
+            padding-left: 1.5rem;
+            margin: 0;
+        }
+
+        .description li {
+            margin-bottom: 1rem;
+        }
+
+        .warning-box {
+            margin-top: 2rem;
+            background-color: rgba(251, 191, 36, 0.1);
+            border-left: 4px solid #fbbf24;
+            padding: 1.25rem;
+            border-radius: 0 0.5rem 0.5rem 0;
+        }
+
+        .warning-title {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            color: #fbbf24;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .warning-text {
+            color: #e2e8f0;
+            font-size: 1rem;
+            margin: 0;
+            font-style: italic;
+        }
+
+        .footer-line {
+            height: 6px;
+            width: 100%;
+            display: flex;
+        }
+
+        .line-1 {
+            flex: 1;
+            background-color: #22d3ee;
+        }
+
+        .line-2 {
+            flex: 1;
+            background-color: #818cf8;
+        }
+
+        .line-3 {
+            flex: 1;
+            background-color: #fbbf24;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="slide-container">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+
+        <div class="header">
+            <h1 class="title">Two Technical Approaches</h1>
+        </div>
+
+        <div class="content-wrapper">
+            <div class="column">
+                <div class="number-badge">01</div>
+                <div class="column-header">
+                    <div class="icon-box icon-mining">
+                        <i class="fa-solid fa-diagram-project"></i>
+                    </div>
+                    <div>
+                        <h2 class="col-title">Usage Pattern Mining</h2>
+                        <span class="citation">ECOOP (2009)</span>
+                    </div>
+                </div>
+                <div class="description">
+                    <ul>
+                        <li>
+                            <p><strong>Mines large repositories</strong> to detect common method call sequences
+                                automatically.</p>
+                        </li>
+                        <li>
+                            <p>Leverages <strong>frequent usage patterns</strong> ("wisdom of the crowds") to guide
+                                correct API updates.</p>
+                        </li>
+                    </ul>
+                </div>
+                <div class="warning-box">
+                    <div class="warning-title">
+                        <i class="fa-solid fa-triangle-exclamation"></i>
+                        Caveat
+                    </div>
+                    <p class="warning-text">
+                        Frequent ≠ correct. Results depend heavily on whose code is being mined (bias propagation).
+                    </p>
+                </div>
+            </div>
+
+            <div class="column">
+                <div class="number-badge">02</div>
+                <div class="column-header">
+                    <div class="icon-box icon-docs">
+                        <i class="fa-solid fa-file-code"></i>
+                    </div>
+                    <div>
+                        <h2 class="col-title">Doc-Based Matching</h2>
+                        <span class="citation">ACM SIGSOFT ISSTA 2018</span>
+                    </div>
+                </div>
+                <div class="description">
+                    <ul>
+                        <li>
+                            <p>Converts <strong>documentation</strong> into formal specifications and machine-readable
+                                constraints.</p>
+                        </li>
+                        <li>
+                            <p>Enables <strong>Natural Language → Code</strong> mapping to find semantically similar API
+                                replacements.</p>
+                        </li>
+                    </ul>
+                </div>
+                <div class="warning-box">
+                    <div class="warning-title">
+                        <i class="fa-solid fa-triangle-exclamation"></i>
+                        Caveat
+                    </div>
+                    <p class="warning-text">
+                        Documentation quality varies widely, making this approach fragile for poorly documented
+                        libraries.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation Arrows -->
+        <a href="test.html" class="arrow arrow-left"><i class="fa-solid fa-arrow-left"></i></a>
+        <a href="test3.html" class="arrow arrow-right"><i class="fa-solid fa-arrow-right"></i></a>
+
+        <div class="footer-line">
+            <div class="line-1"></div>
+            <div class="line-2"></div>
+            <div class="line-3"></div>
+        </div>
+    </div>
+</body>
+
+</html>

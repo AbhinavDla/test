@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Power &amp; Documentation</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&amp;family=Roboto+Mono:wght@400;500;700&amp;display=swap"
+        rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+            background-color: #0f172a;
+            color: #f8fafc;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .slide-container {
+            width: 1280px;
+            height: 720px;
+            position: relative;
+            background-color: #0f172a;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* Navigation Arrows */
+        .arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 2.5rem;
+            color: #22d3ee;
+            background-color: rgba(15, 23, 42, 0.6);
+            padding: 0.5rem 1rem;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            z-index: 20;
+        }
+
+        .arrow:hover {
+            background-color: rgba(15, 23, 42, 0.8);
+        }
+
+        .arrow-left {
+            left: 20px;
+        }
+
+        .arrow-right {
+            right: 20px;
+        }
+
+        /* Keep all previous CSS from original slide */
+        .blob {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            z-index: 0;
+            opacity: 0.15;
+        }
+
+        .blob-1 {
+            width: 600px;
+            height: 600px;
+            background-color: #fbbf24;
+            top: -200px;
+            right: -100px;
+        }
+
+        .blob-2 {
+            width: 500px;
+            height: 500px;
+            background-color: #4f46e5;
+            bottom: -100px;
+            left: -100px;
+        }
+
+        .header {
+            padding: 2.5rem 4rem 1rem 4rem;
+            z-index: 10;
+        }
+
+        .title {
+            font-size: 3rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            color: white;
+            border-left: 6px solid #fbbf24;
+            padding-left: 1.5rem;
+        }
+
+        .content-wrapper {
+            display: flex;
+            flex: 1;
+            padding: 0 4rem 2rem 4rem;
+            z-index: 10;
+            gap: 3rem;
+        }
+
+        .left-col {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .right-col {
+            flex: 1.2;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        .citation-box {
+            background-color: rgba(30, 41, 59, 0.5);
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            padding: 1.5rem;
+            border-radius: 1rem;
+            margin-bottom: 2rem;
+            backdrop-filter: blur(8px);
+        }
+
+        .citation-quote {
+            font-size: 1.15rem;
+            font-style: italic;
+            color: #cbd5e1;
+            margin-bottom: 0.75rem;
+            line-height: 1.4;
+        }
+
+        .citation-author {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 0.9rem;
+            color: #fbbf24;
+            font-weight: 600;
+        }
+
+        .dependencies-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #e2e8f0;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .dependency-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+            background-color: rgba(15, 23, 42, 0.4);
+            padding: 0.75rem 1rem;
+            border-radius: 0.5rem;
+            border-left: 3px solid #22d3ee;
+        }
+
+        .dep-icon {
+            width: 32px;
+            color: #22d3ee;
+            font-size: 1.1rem;
+            text-align: center;
+            margin-right: 1rem;
+        }
+
+        .dep-text {
+            font-size: 1.1rem;
+            color: #f1f5f9;
+        }
+
+        .scale-container {
+            width: 100%;
+            height: 300px;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            margin-top: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .scale-base {
+            width: 160px;
+            height: 20px;
+            background-color: #64748b;
+            border-radius: 10px 10px 0 0;
+            z-index: 2;
+        }
+
+        .scale-stand {
+            width: 16px;
+            height: 180px;
+            background-color: #475569;
+            position: absolute;
+            bottom: 20px;
+            z-index: 1;
+        }
+
+        .scale-fulcrum {
+            width: 30px;
+            height: 30px;
+            background-color: #94a3b8;
+            border-radius: 50%;
+            position: absolute;
+            bottom: 185px;
+            z-index: 3;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        }
+
+        .scale-beam {
+            width: 460px;
+            height: 12px;
+            background-color: #cbd5e1;
+            position: absolute;
+            bottom: 200px;
+            border-radius: 6px;
+            transform: rotate(12deg);
+            transform-origin: center;
+            z-index: 2;
+        }
+
+        .pan-string {
+            width: 2px;
+            height: 80px;
+            background-color: #cbd5e1;
+            position: absolute;
+            top: 6px;
+        }
+
+        .pan-string-left {
+            left: 20px;
+        }
+
+        .pan-string-right {
+            right: 20px;
+        }
+
+        .pan {
+            width: 140px;
+            height: 50px;
+            background: rgba(30, 41, 59, 0.8);
+            border: 2px solid #64748b;
+            border-radius: 0 0 70px 70px;
+            position: absolute;
+            top: 86px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .pan-left {
+            left: -50px;
+            border-color: #fbbf24;
+            box-shadow: 0 0 20px rgba(251, 191, 36, 0.2);
+        }
+
+        .pan-right {
+            right: -50px;
+            border-color: #94a3b8;
+            opacity: 0.6;
+        }
+
+        .weight-heavy {
+            position: absolute;
+            bottom: 15px;
+            font-size: 3rem;
+            color: #fbbf24;
+            filter: drop-shadow(0 4px 4px rgba(0, 0, 0, 0.5));
+            z-index: 4;
+        }
+
+        .weight-light {
+            position: absolute;
+            bottom: 15px;
+            font-size: 2rem;
+            color: #94a3b8;
+            opacity: 0.7;
+            z-index: 4;
+        }
+
+        .label-dominant {
+            position: absolute;
+            bottom: -50px;
+            left: -20px;
+            background: rgba(251, 191, 36, 0.1);
+            color: #fbbf24;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            font-weight: 700;
+            font-size: 0.9rem;
+            text-align: center;
+            width: 180px;
+            border: 1px solid rgba(251, 191, 36, 0.3);
+        }
+
+        .label-under {
+            position: absolute;
+            bottom: -50px;
+            right: -20px;
+            background: rgba(148, 163, 184, 0.1);
+            color: #cbd5e1;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            font-size: 0.9rem;
+            text-align: center;
+            width: 180px;
+            border: 1px solid rgba(148, 163, 184, 0.2);
+        }
+
+        .conclusion-footer {
+            background: linear-gradient(90deg, rgba(251, 191, 36, 0.15) 0%, rgba(15, 23, 42, 0) 100%);
+            border-left: 6px solid #fbbf24;
+            padding: 1.5rem 2rem;
+            margin-top: auto;
+            width: 100%;
+        }
+
+        .conclusion-statement {
+            font-size: 1.75rem;
+            font-weight: 800;
+            color: white;
+            margin: 0;
+            letter-spacing: -0.01em;
+        }
+
+        .accent-warn {
+            color: #fbbf24;
+        }
+
+        .footer-line {
+            height: 6px;
+            width: 100%;
+            display: flex;
+        }
+
+        .line-1 {
+            flex: 1;
+            background-color: #22d3ee;
+        }
+
+        .line-2 {
+            flex: 1;
+            background-color: #818cf8;
+        }
+
+        .line-3 {
+            flex: 1;
+            background-color: #fbbf24;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="slide-container">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+
+        <div class="header">
+            <h1 class="title">Power &amp; Documentation</h1>
+        </div>
+
+        <div class="content-wrapper">
+            <div class="left-col">
+                <div class="citation-box">
+                    <p class="citation-quote">
+                        "Computing has always reflected institutional power."
+                    </p>
+                    <div class="citation-author">
+                        <i class="fa-solid fa-book mr-2"></i>Joy Lisi Rankin, A People's History of Computing...
+                    </div>
+                </div>
+                <div class="dependencies-title">
+                    <i class="fa-solid fa-gear mr-2"></i> If automation depends on:
+                </div>
+                <div class="dependency-item">
+                    <div class="dep-icon"><i class="fa-solid fa-file-lines"></i></div>
+                    <div class="dep-text">High-quality documentation</div>
+                </div>
+                <div class="dependency-item">
+                    <div class="dep-icon"><i class="fa-brands fa-git-alt"></i></div>
+                    <div class="dep-text">Large code repositories</div>
+                </div>
+                <div class="dependency-item">
+                    <div class="dep-icon"><i class="fa-solid fa-users-gear"></i></div>
+                    <div class="dep-text">Well-resourced communities</div>
+                </div>
+            </div>
+
+            <div class="right-col">
+                <div class="scale-container">
+                    <div class="scale-stand"></div>
+                    <div class="scale-base"></div>
+                    <div class="scale-fulcrum"></div>
+                    <div class="scale-beam">
+                        <div class="pan-string pan-string-left">
+                            <div class="pan pan-left">
+                                <i class="fa-solid fa-building-columns weight-heavy"></i>
+                                <div class="label-dominant">
+                                    Dominant Projects<br />
+                                    <span class="text-xs font-normal opacity-75">Advantaged</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="pan-string pan-string-right">
+                            <div class="pan pan-right">
+                                <i class="fa-brands fa-osi weight-light"></i>
+                                <div class="label-under">
+                                    Small Open Source<br />
+                                    <span class="text-xs font-normal opacity-75">Disadvantaged</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="conclusion-footer">
+                    <p class="conclusion-statement">
+                        Then automation <span class="accent-warn">is not neutral.</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation Arrows -->
+        <a href="test3.html" class="arrow arrow-left"><i class="fa-solid fa-arrow-left"></i></a>
+        <a href="test5.html" class="arrow arrow-right"><i class="fa-solid fa-arrow-right"></i></a>
+
+        <div class="footer-line">
+            <div class="line-1"></div>
+            <div class="line-2"></div>
+            <div class="line-3"></div>
+        </div>
+    </div>
+</body>
+
+</html>

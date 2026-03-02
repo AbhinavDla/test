@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Can We Automate API Migration?</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&amp;family=Roboto+Mono:wght@400;700&amp;display=swap"
+        rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+            background-color: #0f172a;
+            color: #f8fafc;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .slide-container {
+            width: 1280px;
+            height: 720px;
+            position: relative;
+            background-color: #0f172a;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        /* Arrows */
+        .arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 2.5rem;
+            color: #22d3ee;
+            background-color: rgba(15, 23, 42, 0.6);
+            padding: 0.5rem 1rem;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            z-index: 20;
+        }
+
+        .arrow:hover {
+            background-color: rgba(15, 23, 42, 0.8);
+        }
+
+        .arrow-left {
+            left: 20px;
+        }
+
+        .arrow-right {
+            right: 20px;
+        }
+
+        /* Existing styles omitted for brevity; keep all previous CSS here */
+        .blob {
+            position: absolute;
+            border-radius: 50%;
+            opacity: 0.15;
+            z-index: 0;
+        }
+
+        .blob-1 {
+            width: 600px;
+            height: 600px;
+            background-color: #0ea5e9;
+            top: -200px;
+            left: -100px;
+        }
+
+        .blob-2 {
+            width: 700px;
+            height: 700px;
+            background-color: #6366f1;
+            bottom: -200px;
+            right: -100px;
+        }
+
+        .blob-3 {
+            width: 300px;
+            height: 300px;
+            background-color: #d97706;
+            top: 40%;
+            left: 20%;
+            opacity: 0.05;
+        }
+
+        .content {
+            z-index: 10;
+            text-align: center;
+            max-width: 1000px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .icon-row {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .icon-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 120px;
+            height: 120px;
+            background-color: rgba(30, 41, 59, 0.5);
+            border-radius: 24px;
+            border: 1px solid rgba(148, 163, 184, 0.1);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+        }
+
+        .icon-lg {
+            font-size: 3.5rem;
+        }
+
+        .connector {
+            height: 2px;
+            width: 60px;
+            background-color: #475569;
+            position: relative;
+        }
+
+        .connector::after {
+            content: '?';
+            position: absolute;
+            top: -14px;
+            left: 20px;
+            background-color: #0f172a;
+            padding: 0 5px;
+            color: #94a3b8;
+            font-weight: bold;
+            font-family: 'Roboto Mono', monospace;
+        }
+
+        .main-title {
+            font-size: 4rem;
+            font-weight: 800;
+            line-height: 1.1;
+            letter-spacing: -0.02em;
+            margin-bottom: 1.5rem;
+            color: white;
+        }
+
+        .highlight-tech {
+            color: #22d3ee;
+        }
+
+        .highlight-ethics {
+            color: #fbbf24;
+        }
+
+        .subtitle-box {
+            background-color: rgba(15, 23, 42, 0.6);
+            border-left: 4px solid #38bdf8;
+            padding: 1.5rem 2rem;
+            max-width: 800px;
+            text-align: left;
+            margin-top: 1rem;
+            backdrop-filter: blur(4px);
+        }
+
+        .context-text {
+            font-size: 1.25rem;
+            color: #cbd5e1;
+            font-weight: 300;
+            margin-bottom: 0.5rem;
+            line-height: 1.6;
+        }
+
+        .big-question {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #f8fafc;
+            margin-top: 0.5rem;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .mono-accent {
+            font-family: 'Roboto Mono', monospace;
+            color: #22d3ee;
+        }
+
+        .footer-line {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 6px;
+            display: flex;
+        }
+
+        .line-1 {
+            flex: 1;
+            background-color: #22d3ee;
+        }
+
+        .line-2 {
+            flex: 1;
+            background-color: #818cf8;
+        }
+
+        .line-3 {
+            flex: 1;
+            background-color: #fbbf24;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="slide-container">
+        <!-- Background Decor -->
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+        <div class="content">
+            <div class="icon-row">
+                <div class="icon-container">
+                    <i class="fa-solid fa-laptop-code icon-lg highlight-tech"></i>
+                </div>
+                <div class="connector"></div>
+                <div class="icon-container">
+                    <i class="fa-solid fa-scale-balanced icon-lg highlight-ethics"></i>
+                </div>
+            </div>
+            <div class="main-title">
+                <p>Can We Automate <br />API Migration — <span class="highlight-tech">Safely</span> &amp; <span
+                        class="highlight-ethics">Equitably</span>?</p>
+            </div>
+            <div class="subtitle-box">
+                <p class="context-text">
+                    Libraries constantly update, and migrating old API calls to new versions is slow and error-prone.
+                </p>
+                <p class="big-question">
+                    So the big question: <span class="mono-accent">Can we automate it responsibly?</span>
+                </p>
+            </div>
+        </div>
+
+        <!-- Navigation Arrows -->
+        <a href="test2.html" class="arrow arrow-right"><i class="fa-solid fa-arrow-right"></i></a>
+
+        <!-- Footer Accent -->
+        <div class="footer-line">
+            <div class="line-1"></div>
+            <div class="line-2"></div>
+            <div class="line-3"></div>
+        </div>
+    </div>
+</body>
+
+</html>
