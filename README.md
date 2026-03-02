@@ -1,0 +1,1 @@
+To see the website press code, then codespaces, then wait. Then press the extensions tab on the left sidebar which looks like 4 squares with the top right one falling off and then download the live server application. Wait for the download, press into test.html, and the in the bottom right press go Live.
